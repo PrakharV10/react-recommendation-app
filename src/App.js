@@ -1,25 +1,50 @@
-import logo from './logo.svg';
+import {useState} from 'react';
 import './App.css';
+import {database} from './Database.js';
 
-function App() {
+var databaseArray = Object.keys(database);
+
+export default function App() {
+
+  const [selectedGame , setSelectedGame] = useState("Marvel");
+  function onclickHandler(game){
+    setSelectedGame(game);
+    console.log(selectedGame);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+      <header>
+        <h1>MOVIES COLLECTION</h1>
       </header>
+
+      <section>
+        <ul>
+          {
+            databaseArray.map(function(game,index){
+              return <li key = {index} onClick = {() => onclickHandler(game)}>{game}</li>
+            })
+          }
+        </ul>
+        
+        {
+          database[selectedGame].map((game) => {
+            return(
+              <div className = "info-card">
+                <img className = "left-card" src = {game.poster} alt = "poster" />
+
+                <div className="right-card">
+                  <div className = "game-name"> {game.name}</div>
+                  <div className = "game-date">Released On : {game.releaseDate}</div>
+                  <div className = "game-rating">IMDb Rating : {game.ratingIMDb}</div>
+                  <div className = "game-director">Directed by : {game.director}</div>
+                </div>
+              </div>
+            );
+          }) 
+        } 
+      </section>
     </div>
   );
 }
 
-export default App;
